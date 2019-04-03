@@ -13,7 +13,6 @@ namespace BlobStorage.Controllers
 {
     public class HomeController : Controller
     {
-        List<Imagen> imglist = new List<Imagen>();
         public ActionResult Index(String nombre)
         {
             String keys = CloudConfigurationManager.GetSetting("ConexionBlobs");
@@ -23,8 +22,9 @@ namespace BlobStorage.Controllers
             if (nombre != null)
             {
                 CloudBlockBlob blockBlob = container.GetBlockBlobReference(nombre);
-                blockBlob.Delete();
+                blockBlob.DeleteIfExists();
             }
+            List<Imagen> imglist = new List<Imagen>();
             foreach (IListBlobItem item in container.ListBlobs(null, true))
             {
                 if (item.GetType() == typeof(CloudBlockBlob))
